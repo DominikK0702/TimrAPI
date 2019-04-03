@@ -75,3 +75,6 @@ class TimrApi():
 
     def filter_by_month(self, items, year, month):
         return [item for item in items if item.startTime.year == year and item.startTime.month == month]
+
+    def filter_by_workitemid(self, items, externalWorkItemID):
+        return [item for item in items if item.externalWorkItemId == externalWorkItemID]
