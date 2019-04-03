@@ -69,10 +69,3 @@ class TimrApi():
 
     def filter_by_month(self, items, year, month):
         return [item for item in items if item.startTime.year == year and item.startTime.month == month]
-
-
-if __name__ == '__main__':
-    api = TimrApi()
-
-    api.get_admins()
-    pass
