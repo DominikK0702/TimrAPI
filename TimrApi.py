@@ -22,8 +22,14 @@ class TimrApi():
     def get_cars(self):
         return self.client.service.GetCars()
 
+    def get_user(self, externalUserId):
+        return [user for user in self.get_users() if user.externalId == externalUserId][0]
+
     def get_users(self):
         return self.client.service.GetUsers()
+
+    def get_working_users(self):
+        return [self.get_user(worktime.externalUserId) for worktime in self.get_running_worktimes()]
 
     def get_admins(self):
         return [user for user in self.get_users() if user.isAdmin == True]
