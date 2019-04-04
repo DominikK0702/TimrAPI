@@ -29,6 +29,7 @@ class TimrApi():
         return self.client.service.GetUsers()
 
     def get_working_users(self):
+        # todo returns every worktime even urlaub, krankheit usw...
         return [self.get_user(worktime.externalUserId) for worktime in self.get_running_worktimes()]
 
     def get_admins(self):
@@ -62,6 +63,13 @@ class TimrApi():
         return self.client.service.GetWorkItems()
 
     def get_Tasks(self):
+
+        def iterate_subtasks(task, cb):
+            if len(task.subtasks) > 0:
+                for subtask in task.subtasks:
+                    cb(subtask)
+                    iterate_subtasks(subtask, cb)
+
         return self.client.service.GetTasks()
 
     def filter_by_weeknumber(self, items, start, end):
