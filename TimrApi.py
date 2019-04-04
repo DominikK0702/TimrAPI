@@ -29,8 +29,7 @@ class TimrApi():
         return self.client.service.GetUsers()
 
     def get_working_users(self):
-        # todo returns every worktime even urlaub, krankheit usw...
-        return [self.get_user(worktime.externalUserId) for worktime in self.get_running_worktimes()]
+        return [self.get_user(worktime.externalUserId) for worktime in self.get_running_worktimes() if worktime.externalWorkItemId in ['anwesenheitszeit', 'dienstreise']]
 
     def get_admins(self):
         return [user for user in self.get_users() if user.isAdmin == True]
