@@ -1,4 +1,5 @@
 import configparser
+import datetime
 
 from requests.auth import HTTPBasicAuth
 from requests import Session
@@ -64,6 +65,7 @@ class TimrApi():
     def get_Tasks(self):
 
         def iterate_subtasks(task, cb):
+            # recursive to iterate into layers
             if len(task.subtasks) > 0:
                 for subtask in task.subtasks:
                     cb(subtask)
@@ -85,3 +87,7 @@ class TimrApi():
 
     def filter_by_workitemid(self, items, externalWorkItemID):
         return [item for item in items if item.externalWorkItemId == externalWorkItemID]
+
+    def add_weeknumbers(self, items):
+        for item in items:
+            item.weeknumber = int(item.startTime.strftime('%W')) + 1
