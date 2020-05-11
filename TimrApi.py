@@ -1,6 +1,3 @@
-import configparser
-import datetime
-
 from requests.auth import HTTPBasicAuth
 from requests import Session
 
@@ -10,84 +7,145 @@ from zeep.transports import Transport
 
 class TimrApi():
     def __init__(self):
-        self.config = configparser.ConfigParser()
-        self.config.read('config.ini')
-        self.identifier = self.config['Auth']['identifier']
-        self.token = self.config['Auth']['token']
+        self.identifier = 'identifier'
+        self.token = 'token'
         self.session = Session()
         self.session.auth = HTTPBasicAuth(self.identifier, self.token)
         self.settings = Settings(strict=False)
         self.client = Client(wsdl='https://timrsync.timr.com/timr/timrsync.wsdl',
                              transport=Transport(session=self.session), settings=self.settings)
 
-    def get_cars(self):
+    def AddCar(self):
+        raise NotImplementedError
+
+    def AddTask(self):
+        raise NotImplementedError
+
+    def AddUser(self):
+        raise NotImplementedError
+
+    def AddWorkItem(self):
+        raise NotImplementedError
+
+    def AssignCarToUser(self):
+        raise NotImplementedError
+
+    def AssignTaskToUser(self):
+        raise NotImplementedError
+
+    def DeleteCar(self):
+        raise NotImplementedError
+
+    def DeleteCarByUUID(self):
+        raise NotImplementedError
+
+    def DeleteTask(self):
+        raise NotImplementedError
+
+    def DeleteTaskByUUID(self):
+        raise NotImplementedError
+
+    def DeleteUser(self):
+        raise NotImplementedError
+
+    def DeleteUserByUUID(self):
+        raise NotImplementedError
+
+    def DeleteWorkItem(self):
+        raise NotImplementedError
+
+    def DeleteWorkItemByUUID(self):
+        raise NotImplementedError
+
+    def GetCars(self):
         return self.client.service.GetCars()
 
-    def get_user(self, externalUserId):
-        return [user for user in self.get_users() if user.externalId == externalUserId][0]
-
-    def get_users(self):
-        return self.client.service.GetUsers()
-
-    def get_working_users(self):
-        return [self.get_user(worktime.externalUserId) for worktime in self.get_running_worktimes() if worktime.externalWorkItemId in ['anwesenheitszeit', 'dienstreise']]
-
-    def get_admins(self):
-        return [user for user in self.get_users() if user.isAdmin == True]
-
-    def get_projecttimes(self):
-        return self.client.service.GetProjectTimes()
-
-    def get_running_projecttimes(self):
-        return self.client.service.GetRunningProjectTimes()
-
-    def get_user_projecttimes(self, externalUserID):
-        return [item for item in self.get_projecttimes() if item.externalUserId == externalUserID]
-
-    def get_worktimes(self):
-        return self.client.service.GetWorkTimes()
-
-    def get_running_worktimes(self):
-        return self.client.service.GetRunningWorkTimes()
-
-    def get_user_worktimes(self, externalUserID):
-        return [item for item in self.get_worktimes() if item.externalUserId == externalUserID]
-
-    def get_drivelogs(self):
+    def GetDriveLogs(self):
         return self.client.service.GetDriveLogs()
 
-    def get_user_drivelogs(self, externalUserID):
-        return [item for item in self.get_drivelogs() if item.externalUserId == externalUserID]
+    def GetProjectTimes(self):
+        return self.client.service.GetProjectTimes()
 
-    def get_workitems(self):
-        return self.client.service.GetWorkItems()
+    def GetRunningDriveLogs(self):
+        return self.client.service.GetRunningDriveLogs()
 
-    def get_Tasks(self):
+    def GetRunningProjectTimes(self):
+        return self.client.service.GetRunningProjectTimes()
 
-        def iterate_subtasks(task, cb):
-            # recursive to iterate into layers
-            if len(task.subtasks) > 0:
-                for subtask in task.subtasks:
-                    cb(subtask)
-                    iterate_subtasks(subtask, cb)
+    def GetRunningWorkTimes(self):
+        return self.client.service.GetRunningWorkTimes()
 
+    def GetTask(self, externalid):
+        return self.client.service.GetTask(externalid)
+
+    def GetTaskByUUID(self, uuid):
+        return self.client.service.GetTaskByUUID(uuid)
+
+    def GetTasks(self):
         return self.client.service.GetTasks()
 
-    def filter_by_weeknumber(self, items, start, end):
-        if start > end:
-            raise ValueError('Start can not be bigger than end.')
-        elif end > 52:
-            raise ValueError('A Year only has 52 weeks.')
+    def GetUsers(self):
+        return self.client.service.GetUsers()
 
-        return [item for item in items if
-                int(item.startTime.strftime('%W')) + 1 >= start and int(item.startTime.strftime('%W')) + 1 <= end]
+    def GetWorkItems(self):
+        return self.client.service.GetWorkItems()
 
-    def filter_by_month(self, items, year, month):
-        return [item for item in items if item.startTime.year == year and item.startTime.month == month]
+    def GetWorkTimes(self):
+        return self.client.service.GetWorkTimes()
 
-    def filter_by_workitemid(self, items, externalWorkItemID):
-        return [item for item in items if item.externalWorkItemId == externalWorkItemID]
+    def LockProjectTimes(self):
+        raise NotImplementedError
 
-    def add_weeknumbers(self, items):
-        for item in items:
-            item.weeknumber = int(item.startTime.strftime('%W')) + 1
+    def RemoveCarFromUser(self):
+        raise NotImplementedError
+
+    def RemoveTaskFromUser(self):
+        raise NotImplementedError
+
+    def SaveDriveLog(self):
+        raise NotImplementedError
+
+    def SaveProjectTime(self):
+        raise NotImplementedError
+
+    def SaveWorkTime(self):
+        raise NotImplementedError
+
+    def SetDriveLogsStatus(self):
+        raise NotImplementedError
+
+    def SetProjectTimesStatus(self):
+        raise NotImplementedError
+
+    def SetTaskExternalId(self):
+        raise NotImplementedError
+
+    def SetWorkTimesStatus(self):
+        raise NotImplementedError
+
+    def UnlockProjectTimes(self):
+        raise NotImplementedError
+
+    def UpdateCar(self):
+        raise NotImplementedError
+
+    def UpdateCarId(self):
+        raise NotImplementedError
+
+    def UpdateTask(self):
+        raise NotImplementedError
+
+    def UpdateTaskId(self):
+        raise NotImplementedError
+
+    def UpdateUser(self):
+        raise NotImplementedError
+
+    def UpdateUserId(self):
+        raise NotImplementedError
+
+    def UpdateWorkItem(self):
+        raise NotImplementedError
+
+    def UpdateWorkItemId(self):
+        raise NotImplementedError
